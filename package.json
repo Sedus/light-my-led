@@ -1,0 +1,33 @@
+{
+  "name": "light-my-led",
+  "version": "1.0.0",
+  "description": "Make a LED light on an arduino",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Sedus/light-my-led.git"
+  },
+  "keywords": [
+    "Arduino",
+    "LED",
+    "node"
+  ],
+  "author": "Pim Voeten",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sedus/light-my-led/issues"
+  },
+  "homepage": "https://github.com/Sedus/light-my-led#readme",
+  "dependencies": {
+    "bluebird": "^2.9.34",
+    "cli": "^0.9.0",
+    "lodash": "^3.10.1",
+    "node-redis": "^0.1.7",
+    "redis": "^1.0.0",
+    "serialport": "^1.7.4"
+  }
+}
