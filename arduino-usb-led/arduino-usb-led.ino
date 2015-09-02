@@ -1,39 +1,62 @@
-sconst int ledPin = 13;
-const int inputPin = 12;
-long inputDelay = 0;
-long startTime = 0;
-String reply;
+const byte outputLedPin = 13; // Target LED to light up
+const byte inputLedPin = 12; // Lights when data is received
+const int updateDelay = 500; // Sends signals every x milliseconds
+unsigned long currentMillis = 0; // Current millis count
+unsigned long lastUpdateMillis = 0; // Last time a message was sent (used for message loop)
+unsigned long startTime = 0; // Amount of milliseconds since the LED started shining
+unsigned int seconds = 0; // Amount of seconds the LED should shine
 
 void setup() {
-  Serial.begin(9600);
-  Serial.setTimeout(100); 
-  pinMode(ledPin, OUTPUT);
-  pinMode(inputPin, OUTPUT);
+  Serial.begin(115200);
+  pinMode(outputLedPin, OUTPUT);
+  pinMode(inputLedPin, OUTPUT);
 }
 
 void loop() {
-  // Turn off LED
-  if(inputDelay > 0 && millis() - startTime >= inputDelay) {
-    digitalWrite(ledPin, LOW);
-    inputDelay = 0;
+  currentMillis = millis();
+
+  // Turn on/off LED
+  if(seconds > 0) {
+    startTime = turnLedOnOff(outputLedPin, seconds);
+  }
+  
+  // Check input, but only if the amount of seconds have passed
+  if (seconds == 0) {
+    seconds = getSecondsFromInput(outputLedPin, inputLedPin);
   }
 
-  // Check input
-  if(Serial.available() > 0) {
-    digitalWrite(inputPin, HIGH);
-    inputDelay = Serial.parseInt();
-    inputDelay = abs(inputDelay) * 1000;
+  // Send output message over serial
+  if (currentMillis - lastUpdateMillis >= updateDelay) {
+    sendOutput(digitalRead(outputLedPin) == HIGH, currentMillis - startTime);
+    lastUpdateMillis = millis();
+  }
+}
 
-    if(inputDelay > 0 && digitalRead(ledPin) == LOW) {
-      reply = "LED on for: ";
-      reply += inputDelay / 1000;
-      reply += " seconds";
-      Serial.println(reply);
-      startTime = millis();
-      digitalWrite(ledPin, HIGH);
-    }
+unsigned long turnLedOnOff(byte outputLedPin, unsigned int seconds) {
+  if (seconds > 0 && digitalRead(outputLedPin) == LOW) {
+    digitalWrite(outputLedPin, HIGH);
+    return millis();
   } else {
-    digitalWrite(inputPin, LOW);
+    digitalWrite(outputLedPin, LOW);
+    return 0;
   }
+}
+
+long getSecondsFromInput(byte outputLedPin, byte inputLedPin) {
+  if (Serial.available() > 0) {
+    digitalWrite(inputLedPin, HIGH);
+    return abs(Serial.parseInt()) * 1000;
+  } else {
+    digitalWrite(inputLedPin, LOW);
+  }
+  return 0;
+}
+
+void sendOutput(boolean on, unsigned long millis) {
+  String duration = "";
+  if(millis > 0) {
+    duration = ",\"duration\":" + millis;
+  }
+  Serial.println("{\"led\":{\"status:\"" + (String)(on ? "ON" : "OFF") + duration + "}}");
 }
 

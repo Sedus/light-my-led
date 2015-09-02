@@ -5,6 +5,8 @@
  To make this happen we're gonna use NodeJS with Redis on the Pi. The Pi and the Arduino
  are connected through the serial USB connection.
 
+ The Arduino will send a message to the Pi letting it know when the LED starts and stops shining.
+ 
 ## Raspberry Pi
 
 ### NodeJS
