@@ -1,5 +1,9 @@
 # light-my-led
-Make a LED light on an arduino
+ 
+ The goal of this project is to make a LED light up on an Arduino using a Raspberry Pi.
+ 
+ To make this happen we're gonna use NodeJS with Redis on the Pi. The Pi and the Arduino
+ are connected through the serial USB connection.
 
 ## Raspberry Pi
 
