@@ -2,7 +2,7 @@
   "name": "light-my-led",
   "version": "1.0.0",
   "description": "Make a LED light on an arduino",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -28,6 +28,7 @@
     "lodash": "^3.10.1",
     "node-redis": "^0.1.7",
     "redis": "^1.0.0",
+    "restify": "^4.0.0",
     "serialport": "^1.7.4"
   }
 }
