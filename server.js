@@ -44,14 +44,14 @@ function status(req, res, next) {
 
 function light(req, res, next) {
     var seconds = req.body.seconds;
-    service.lightLED(seconds, function (err) {
-        if (err) {
-            return next({message: err});
-        } else {
+    service.lightLED(seconds)
+        .then(function () {
             res.send(200, 'LED will shine for ' + seconds + ' seconds');
             return next();
-        }
-    });
+        })
+        .catch(function (err) {
+            next(err);
+        });
 }
 
 var server = restify.createServer();
