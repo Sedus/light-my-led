@@ -20,22 +20,13 @@ function retrievePorts(req, res, next) {
  *  Set the port to use
  */
 function usePort(req, res, next) {
-    var port = req.body.port;
-    service.listPorts()
-        .then(function (ports) {
-            if (ports.length - 1 < port) {
-                res.send(500, 'Unknown port number');
-            } else {
-                var portName = ports[port].port.comName;
-                service.setPort(portName)
-                    .then(function () {
-                        res.send(200, 'Using port: ' + portName);
-                        next();
-                    })
-            }
+    var portnr = req.body.port;
+    service.setPort(portnr)
+        .then(function (portName) {
+            res.send(200, 'Using port: ' + portName);
+            next();
         })
         .catch(function (err) {
-            res.send(500, err);
             next(err);
         })
 }
