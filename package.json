@@ -30,5 +30,8 @@
     "redis": "^1.0.0",
     "restify": "^4.0.0",
     "serialport": "^1.7.4"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0"
   }
 }
