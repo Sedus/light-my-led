@@ -1,5 +1,5 @@
 var restify = require('restify'),
-    SerialService = require('./src/serial-service').SerialService,
+    SerialService = require('./lib/serial-service').SerialService,
     service = new SerialService();
 
 /**
