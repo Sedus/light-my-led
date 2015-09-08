@@ -63,7 +63,7 @@ server.get('/status', status);
 server.post('/light', light);
 
 server.get(/.*/, restify.serveStatic({
-    directory: './static',
+    directory: './public',
     default: 'index.html'
 }));
 

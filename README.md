@@ -23,3 +23,39 @@ How to install and run Redis on your pi.
     tar -xvf redis-3.0.3.tar.gz
     cd redis-3.0.3
     make
+
+
+3.3.1. Redis
+
+Redis is used to store logged data on the server
+
+http://will-hart.github.io/blitz/server/raspberry-pi-setup.html
+
+$ wget http://download.redis.io/redis-stable.tar.gz
+$ tar xvzf redis-stable.tar.gz
+$ cd redis-stable
+$ make
+$ cd src
+$ sudo cp redis-server /usr/local/bin
+$ sudo cp redis-cli /usr/local/bin
+$ cd ..
+$ cd ..
+$ rm redis-stable.tar.gz
+To start Redis on application start using an init script, do the following:
+
+$ cd redis-stable
+$ sudo mkdir /etc/redis
+$ sudo mkdir /var/redis
+$ sudo cp utils/redis_init_script /etc/init.d/redis_6379
+$ sudo cp redis.conf /etc/redis/6379.conf
+$ sudo mkdir /var/redis/6379
+$ sudo vim /etc/redis/6379.conf
+In the configuration file set the following options:
+
+daemonize to yes
+pidfile to /var/run/redis_6379.pid
+loglevel to notice
+dir to /var/redis/6379
+Save and then in the console set up the init.d file to run on startup
+
+$ sudo update-rc.d redis_6379 defaults
