@@ -59,3 +59,12 @@ dir to /var/redis/6379
 Save and then in the console set up the init.d file to run on startup
 
 $ sudo update-rc.d redis_6379 defaults
+
+
+## TODO
+
+- bundle.js is too large (uglify and minify it), maybe we can remove some libraries from it?
+- Livereload is not working (browserify)
+- Add less or sass for styling
+- Split bundle.js into app.bundle.js and external.bundle.js
+- cleanup devDependencies
