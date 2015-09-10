@@ -12,6 +12,7 @@ var util = require('gulp-util');
 var glob = require('glob');
 var es = require('event-stream');
 var buffer = require('vinyl-buffer');
+var flatten = require('gulp-flatten');
 
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
@@ -62,9 +63,17 @@ gulp.task('create-tmp-js-bundle', function () {
         .src(options.src + '/client/**/*.jsx')
         .pipe(sourcemaps.init())
         .pipe(react())
+        .on('error', util.log)
         .pipe(sourcemaps.write())
-        //.pipe(concat('bundle.jsx'))
         .pipe(gulp.dest(options.tmp))
+        .pipe(livereload());
+});
+
+gulp.task('images', function () {
+    return gulp
+        .src([options.src + '/client/**/*.png'])
+        .pipe(flatten())
+        .pipe(gulp.dest(options.dist + '/public/images'))
         .pipe(livereload());
 });
 
@@ -102,12 +111,12 @@ gulp.task('watch', ['serv'], function () {
         basePath: options.dist + '/public'
     });
     //gulp.watch(options.src + '/sass/**/*.scss', ['styles']);
-    gulp.watch(options.src + '/client/**/*.html', ['build:client:static']);
-    gulp.watch(options.src + '/client/**/*.jsx', ['build:client:js']);
-    //gulp.watch(options.src + '/images/**/*', ['images']);
+    gulp.watch(options.src + '/client/**/*.html', ['build:client:static'], {readDelay: 10000});
+    gulp.watch(options.src + '/client/**/*.jsx', ['build:client:js'], {readDelay: 5000});
+    gulp.watch(options.src + '/client/**/*.png', ['images'], {readDelay: 30000});
 });
 
-gulp.task('build', ['build:server', 'build:client:static', 'build:client:js']);
+gulp.task('build', ['build:server', 'build:client:static', 'images', 'build:client:js']);
 gulp.task('default', ['clean'], function () {
     gulp.start('build', ['watch']);
 });

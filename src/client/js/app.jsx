@@ -1,15 +1,19 @@
 var React = require('react');
-var Router = require('react-router');
-var Bootstrap = require('react-bootstrap');
-var Route = Router.Route;
-var RouteHandler = Router.RouteHandler;
-var DefaultRoute = Router.DefaultRoute;
-var NotFoundRoute = Router.NotFoundRoute;
-var Grid = Bootstrap.Grid;
-var Row = Bootstrap.Row;
-var Col = Bootstrap.Col;
+
+var Router = require('react-router'),
+    Route = Router.Route,
+    RouteHandler = Router.RouteHandler,
+    DefaultRoute = Router.DefaultRoute,
+    NotFoundRoute = Router.NotFoundRoute;
+
+var Bootstrap = require('react-bootstrap'),
+    Grid = Bootstrap.Grid,
+    Row = Bootstrap.Row,
+    Col = Bootstrap.Col;
+
 var home = require('./pages/home/home');
 var system = require('./pages/system/system');
+var Header = require('./components/header/header');
 
 var App = React.createClass({
     contextTypes: {
@@ -18,14 +22,16 @@ var App = React.createClass({
 
     render: function () {
         return (
-            <Grid >
-                <Row>
-                    <Col>
-                        <h1>Light my LED</h1>
-                        <RouteHandler/>
-                    </Col>
-                </Row>
-            </Grid>
+            <div>
+                <Header/>
+                <Grid >
+                    <Row>
+                        <Col>
+                            <RouteHandler/>
+                        </Col>
+                    </Row>
+                </Grid>
+            </div>
         );
     }
 });
