@@ -5,7 +5,8 @@ var led = React.createClass({
     propTypes: {
         color: React.PropTypes.string,
         isOn: React.PropTypes.bool.isRequired,
-        onClick: React.PropTypes.func
+        onClick: React.PropTypes.func,
+        name: React.PropTypes.string
     },
 
     getDefaultProps: function () {
@@ -21,7 +22,7 @@ var led = React.createClass({
     render: function () {
         return (
             <div>
-                <p>LED Component</p>
+                <span>{this.props.name}</span>
                 <img
                     src={this.getImageName()}
                     onClick={this.props.onClick}

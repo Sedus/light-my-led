@@ -1,6 +1,18 @@
 var React = require('react');
-var Led = require('./../../components/led/led');
+
 var Link = require('react-router').Link;
+
+var Bootstrap = require('react-bootstrap'),
+    Row = Bootstrap.Row,
+    Col = Bootstrap.Col;
+
+var Led = require('./../../components/led/led');
+var SystemStore = require('./../../stores/SystemStore');
+var AppDispatcher = require('./../../dispatchers/appDispatcher');
+
+function getAllComponents() {
+    return SystemStore.getAllComponents();
+}
 
 var system = React.createClass({
     contextTypes: {
@@ -9,21 +21,47 @@ var system = React.createClass({
 
     getInitialState: function () {
         return {
-            isOn: false
+            isOn: false,
+            components: getAllComponents()
         };
     },
 
-    toggleState: function () {
-        console.log(this.state.isOn);
-        this.setState({
-            isOn: !this.state.isOn
+    componentDidMount: function () {
+        SystemStore.addChangeListener(this._onChange);
+    },
+
+    componentWillUnmount: function () {
+        SystemStore.removeChangeListener(this._onChange);
+    },
+
+    _onChange: function () {
+        this.setState(getAllComponents());
+    },
+
+    toggleState: function (component) {
+        AppDispatcher.dispatch({
+            eventName: 'toggleState',
+            component: component
         });
     },
 
     render: function () {
         return (
             <div>
-                <Led onClick={this.toggleState} color='red' isOn={this.state.isOn}/>
+                {this.state.components.map(function (component, i) {
+                    return (
+                        <Row key={component.name}>
+                            <Col>
+                                <Led
+                                    name={component.name}
+                                    onClick={this.toggleState.bind(this, component)}
+                                    color={component.color}
+                                    isOn={component.isOn}/>
+                            </Col>
+                        </Row>
+                    );
+                }, this)
+                }
             </div>
         );
     }

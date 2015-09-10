@@ -111,9 +111,9 @@ gulp.task('watch', ['serv'], function () {
         basePath: options.dist + '/public'
     });
     //gulp.watch(options.src + '/sass/**/*.scss', ['styles']);
-    gulp.watch(options.src + '/client/**/*.html', ['build:client:static'], {readDelay: 10000});
-    gulp.watch(options.src + '/client/**/*.jsx', ['build:client:js'], {readDelay: 5000});
-    gulp.watch(options.src + '/client/**/*.png', ['images'], {readDelay: 30000});
+    //gulp.watch(options.src + '/client/**/*.html', ['build:client:static'], {readDelay: 10000});
+    //gulp.watch(options.src + '/client/**/*.jsx', ['build:client:js'], {readDelay: 5000});
+    //gulp.watch(options.src + '/client/**/*.png', ['images'], {readDelay: 30000});
 });
 
 gulp.task('build', ['build:server', 'build:client:static', 'images', 'build:client:js']);
