@@ -36,7 +36,6 @@ void turnLedOnOff(byte outputLedPin, unsigned long &seconds, unsigned long &star
   if (seconds > 0 && currentMillis - startTime < seconds) {
     if (digitalRead(outputLedPin) == LOW) {
       startTime = millis();
-      Serial.println("start time set");
     }
     digitalWrite(outputLedPin, HIGH);
   } else {
@@ -47,12 +46,14 @@ void turnLedOnOff(byte outputLedPin, unsigned long &seconds, unsigned long &star
 }
 
 void getSecondsFromInput(boolean isOn, byte inputLedPin, unsigned long &seconds) {
-  if (Serial.available() > 0) {
-    digitalWrite(inputLedPin, HIGH);
-    seconds = Serial.parseInt() * 1000;
-  } else {
-    digitalWrite(inputLedPin, LOW);
+  while (Serial.available() > 0) {
+      digitalWrite(inputLedPin, HIGH);
+    String incoming = Serial.readStringUntil('\n');
+      long tmp = incoming.toInt();
+      seconds = tmp * 1000;
+      Serial.println(tmp);
   }
+  digitalWrite(inputLedPin, LOW);
 }
 
 void sendOutput(boolean on, unsigned long ms, unsigned long seconds) {
@@ -66,4 +67,10 @@ void sendOutput(boolean on, unsigned long ms, unsigned long seconds) {
   Serial.println(json);
 }
 
-
+boolean isValidNumber(String str) {
+  for (byte i = 0; i < str.length(); i++)
+  {
+    if (isDigit(str.charAt(i))) return true;
+  }
+  return false;
+}

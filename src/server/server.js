@@ -20,22 +20,13 @@ function retrievePorts(req, res, next) {
  *  Set the port to use
  */
 function usePort(req, res, next) {
-    var port = req.body.port;
-    service.listPorts()
-        .then(function (ports) {
-            if (ports.length - 1 < port) {
-                res.send(500, 'Unknown port number');
-            } else {
-                var portName = ports[port].port.comName;
-                service.setPort(portName)
-                    .then(function () {
-                        res.send(200, 'Using port: ' + portName);
-                        next();
-                    })
-            }
+    var portnr = req.body.port;
+    service.setPort(portnr)
+        .then(function (portName) {
+            res.send(200, 'Using port: ' + portName);
+            next();
         })
         .catch(function (err) {
-            res.send(500, err);
             next(err);
         })
 }
@@ -53,14 +44,14 @@ function status(req, res, next) {
 
 function light(req, res, next) {
     var seconds = req.body.seconds;
-    service.lightLED(seconds, function (err) {
-        if (err) {
-            return next({message: err});
-        } else {
+    service.lightLED(seconds)
+        .then(function () {
             res.send(200, 'LED will shine for ' + seconds + ' seconds');
             return next();
-        }
-    });
+        })
+        .catch(function (err) {
+            next(err);
+        });
 }
 
 var server = restify.createServer();
@@ -72,7 +63,7 @@ server.get('/status', status);
 server.post('/light', light);
 
 server.get(/.*/, restify.serveStatic({
-    directory: './static',
+    directory: './public',
     default: 'index.html'
 }));
 
